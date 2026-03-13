@@ -1,0 +1,13 @@
+{
+	"admin/services/opentether": {
+		"title": "OpenTether",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "opentether/main"
+		},
+		"depends": {
+			"acl": [ "luci-app-opentether" ]
+		}
+	}
+}
