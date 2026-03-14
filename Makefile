@@ -50,7 +50,7 @@ endef
 define Package/luci-app-opentether/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] && exit 0
-rm -rf /tmp/luci-* 2>/dev/null
+rm -rf /tmp/luci-* 2>/dev/null  # clear all LuCI caches
 /etc/init.d/rpcd restart 2>/dev/null
 exit 0
 endef
