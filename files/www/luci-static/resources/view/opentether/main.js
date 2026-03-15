@@ -884,21 +884,32 @@ return view.extend({
 							self.updatePreview(serial, loaded);
 						}}, 'Reset'),
 						E('button', { class: 'ot-btn', click: () => {
-							uci.unload('opentether');
-							self.load().then(data => {
-								let [devs] = data;
-								let fresh = (devs || []).find(x => x.serial === serial);
-								if (!fresh) return;
-								self._devices = self._devices.map(x => x.serial === serial ? fresh : x);
-								Object.assign(loaded, fresh);
-								Object.keys(fresh).forEach(k => {
-									let el = document.getElementById(pfx + k.replace(/_/g,'-'));
-									if (!el) return;
-									if (el.type === 'checkbox') el.checked = fresh[k] === '1';
-									else el.value = fresh[k] || '';
+							let status = document.getElementById('ot-save-status-' + serial);
+							if (status) status.textContent = 'Importing YAML...';
+							fs.exec('/usr/lib/opentether/setup.sh', ['import-yaml', serial])
+								.then(() => {
+									uci.unload('opentether');
+									return self.load();
+								})
+								.then(data => {
+									let [devs] = data;
+									let fresh = (devs || []).find(x => x.serial === serial);
+									if (!fresh) return;
+									self._devices = self._devices.map(x => x.serial === serial ? fresh : x);
+									Object.assign(loaded, fresh);
+									Object.keys(fresh).forEach(k => {
+										let el = document.getElementById(pfx + k.replace(/_/g,'-'));
+										if (!el) return;
+										if (el.type === 'checkbox') el.checked = fresh[k] === '1';
+										else el.value = fresh[k] || '';
+									});
+									self.updatePreview(serial, loaded);
+									if (status) status.textContent = 'Loaded from YAML';
+									setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+								})
+								.catch(e => {
+									if (status) status.textContent = 'Error: ' + e.message;
 								});
-								self.updatePreview(serial, loaded);
-							});
 						}}, 'Reload from Config'),
 						E('span', { class: 'ot-save-status', id: 'ot-save-status-' + serial }, ''),
 					]),
