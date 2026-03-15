@@ -1,6 +1,6 @@
 # luci-app-opentether
 
-LuCI web interface for [OpenTether](https://github.com/HelaFaye/opentether) — monitor tunnel status, control the service, and configure all hev-socks5-tunnel settings from your browser.
+LuCI web interface for [OpenTether](https://github.com/HelaFaye/opentether).
 
 Provides a **Services → OpenTether** page in LuCI with two tabs:
 
@@ -38,20 +38,14 @@ make package/luci-app-opentether/compile V=s
 
 ## Installing
 
-The output path varies by target architecture. Replace `<arch>` with your router's architecture.
-
 **apk (OpenWrt 24+ snapshot builds):**
 ```sh
-scp bin/packages/<arch>/base/luci-app-opentether-*.apk root@192.168.1.1:/tmp/
+scp bin/packages/aarch64_cortex-a53/base/luci-app-opentether-*.apk root@192.168.1.1:/tmp/
 ssh root@192.168.1.1 "apk add --allow-untrusted /tmp/luci-app-opentether-*.apk"
 ```
 
 **opkg (OpenWrt stable releases):**
 ```sh
-scp bin/packages/<arch>/base/luci-app-opentether-*.ipk root@192.168.1.1:/tmp/
+scp bin/packages/aarch64_cortex-a53/base/luci-app-opentether-*.ipk root@192.168.1.1:/tmp/
 ssh root@192.168.1.1 "opkg install /tmp/luci-app-opentether-*.ipk"
 ```
-
-## Package signing
-
-To avoid `--allow-untrusted` / unsigned package warnings, you can host these in your own signed feed. See the [OpenWrt package signing documentation](https://openwrt.org/docs/guide-developer/package-signing).
