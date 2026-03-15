@@ -27,7 +27,9 @@
 				"/usr/bin/pgrep":                ["exec"],
 				"/usr/bin/curl":                 ["exec"],
 				"/usr/bin/apk":                  ["exec"],
-				"/sbin/uci":                     ["exec"]
+				"/sbin/uci":                     ["exec"],
+				"/bin/ubus":                     ["exec"],
+				"/usr/bin/ubus":                 ["exec"]
 			},
 			"uci": ["network", "firewall", "dhcp", "opentether"]
 		}
