@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-opentether
 PKG_VERSION:=1.2.0
-PKG_RELEASE:=34
+PKG_RELEASE:=38
 
 PKG_MAINTAINER:=Alisha Faye <helafaye@users.noreply.github.com>
 PKG_LICENSE:=MIT

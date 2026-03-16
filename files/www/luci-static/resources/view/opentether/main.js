@@ -381,6 +381,7 @@ return view.extend({
 		if (errors.length) { if (status) status.textContent = errors[0]; return; }
 		if (status) status.textContent = 'Saving...';
 
+		uci.unload('opentether');
 		uci.load('opentether').then(() => {
 			// Find or create the device section
 			let cfg = null;
@@ -440,8 +441,8 @@ return view.extend({
 				.then(() => fs.exec('uci', ['commit', 'opentether']))
 				.then(() => fs.exec('uci', ['commit', 'network']));
 		}).then(() => uci.apply().catch(() => {}))
-		.then(() => { if (status) status.textContent = 'Applying...'; })
 		.then(() => fs.exec('/usr/lib/opentether/setup.sh', ['apply', serial]))
+		.then(() => { if (status) status.textContent = 'Applying...'; })
 		.then(() => {
 			if (loadedRef) Object.assign(loadedRef, v);
 			// Keep _devices in sync so polls don't re-dirty the form
@@ -887,6 +888,7 @@ return view.extend({
 							let status = document.getElementById('ot-save-status-' + serial);
 							if (status) status.textContent = 'Importing YAML...';
 							fs.exec('/usr/lib/opentether/setup.sh', ['import-yaml', serial])
+								.then(() => fs.exec('/usr/lib/opentether/setup.sh', ['apply', serial]))
 								.then(() => {
 									uci.unload('opentether');
 									return self.load();
