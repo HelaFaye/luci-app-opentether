@@ -3,28 +3,80 @@
 		"description": "Grant access for OpenTether",
 		"read": {
 			"ubus": {
-				"service": [ "list" ]
+				"service": [
+					"list"
+				]
 			},
 			"file": {
-				"/etc/resolv.conf": [ "read" ],
-				"/var/log/": [ "read" ],
-				"/tmp/": [ "read" ],
-				"/usr/sbin/adb": [ "exec" ],
-				"/usr/bin/adb": [ "exec" ],
-				"/sbin/ip": [ "exec" ],
-				"/usr/sbin/ip": [ "exec" ],
-				"/sbin/logread": [ "exec" ],
-				"/usr/sbin/logread": [ "exec" ],
-				"/usr/bin/pgrep": [ "exec" ],
-				"/usr/bin/curl": [ "exec" ],
-				"/usr/bin/apk": [ "exec" ],
-				"/usr/lib/opentether/setup.sh": [ "exec" ],
-				"/etc/init.d/opentether": [ "exec" ]
+				"/etc/resolv.conf": [
+					"read"
+				],
+				"/var/log/": [
+					"read"
+				],
+				"/tmp/": [
+					"read"
+				],
+				"/usr/sbin/adb": [
+					"exec"
+				],
+				"/usr/bin/adb": [
+					"exec"
+				],
+				"/sbin/ip": [
+					"exec"
+				],
+				"/usr/sbin/ip": [
+					"exec"
+				],
+				"/usr/bin/ip": [
+					"exec"
+				],
+				"/sbin/logread": [
+					"exec"
+				],
+				"/usr/sbin/logread": [
+					"exec"
+				],
+				"/usr/bin/logread": [
+					"exec"
+				],
+				"/usr/bin/pgrep": [
+					"exec"
+				],
+				"/usr/bin/curl": [
+					"exec"
+				],
+				"/usr/bin/apk": [
+					"exec"
+				],
+				"/sbin/uci": [
+					"exec"
+				],
+				"/usr/bin/uci": [
+					"exec"
+				],
+				"/usr/lib/opentether/setup.sh": [
+					"exec"
+				],
+				"/etc/init.d/opentether": [
+					"exec"
+				]
 			},
-			"uci": [ "network", "firewall", "dhcp", "opentether" ]
+			"uci": [
+				"network",
+				"firewall",
+				"dhcp",
+				"opentether"
+			]
 		},
 		"write": {
-			"uci": [ "network", "firewall", "dhcp", "opentether" ]
+			"uci": [
+				"network",
+				"firewall",
+				"dhcp",
+				"opentether"
+			]
 		}
 	}
 }
