@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-opentether
-PKG_VERSION:=1.1.0
-PKG_RELEASE:=6
+PKG_VERSION:=1.2.0
+PKG_RELEASE:=30
 
 PKG_MAINTAINER:=Alisha Faye <helafaye@users.noreply.github.com>
 PKG_LICENSE:=MIT
@@ -16,6 +16,7 @@ define Package/luci-app-opentether
   SUBMENU:=3. Applications
   TITLE:=LuCI support for OpenTether
   DEPENDS:=+opentether +luci-base
+  PKGARCH:=all
 endef
 
 define Package/luci-app-opentether/description
@@ -50,7 +51,7 @@ endef
 define Package/luci-app-opentether/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] && exit 0
-rm -rf /tmp/luci-* 2>/dev/null  # clear all LuCI caches
+rm -rf /tmp/luci-* 2>/dev/null
 /etc/init.d/rpcd restart 2>/dev/null
 exit 0
 endef
