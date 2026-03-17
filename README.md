@@ -44,8 +44,6 @@ make package/luci-app-opentether/compile V=s
 
 ## Installing
 
-The output path varies by target architecture. Replace `<arch>` with your router's architecture.
-
 **apk (OpenWrt 24+ snapshot builds):**
 ```sh
 scp bin/packages/<arch>/base/luci-app-opentether-*.apk root@192.168.1.1:/tmp/
@@ -57,6 +55,8 @@ ssh root@192.168.1.1 "apk add --allow-untrusted /tmp/luci-app-opentether-*.apk"
 scp bin/packages/<arch>/base/luci-app-opentether-*.ipk root@192.168.1.1:/tmp/
 ssh root@192.168.1.1 "opkg install /tmp/luci-app-opentether-*.ipk"
 ```
+
+Replace `<arch>` with your router's CPU architecture. If you're not sure, run `uname -m` on the router to check.
 
 ## Package signing
 
