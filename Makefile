@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-opentether
-PKG_VERSION:=1.2.0
-PKG_RELEASE:=38
+PKG_VERSION:=1.2.1
+PKG_RELEASE:=1
 
 PKG_MAINTAINER:=Alisha Faye <helafaye@users.noreply.github.com>
 PKG_LICENSE:=MIT
@@ -16,6 +16,7 @@ define Package/luci-app-opentether
   SUBMENU:=3. Applications
   TITLE:=LuCI support for OpenTether
   DEPENDS:=+opentether +luci-base
+  PKGARCH:=all
 endef
 
 define Package/luci-app-opentether/description
