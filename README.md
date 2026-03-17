@@ -57,7 +57,3 @@ ssh root@192.168.1.1 "opkg install /tmp/luci-app-opentether-*.ipk"
 ```
 
 Replace `<arch>` with your router's CPU architecture. If you're not sure, run `uname -m` on the router to check.
-
-## Package signing
-
-To avoid `--allow-untrusted` / unsigned package warnings, you can host these in your own signed feed. See the [OpenWrt package signing documentation](https://openwrt.org/docs/guide-developer/package-signing).
