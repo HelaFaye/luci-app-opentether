@@ -22,6 +22,12 @@ Provides a **Services → OpenTether** page in LuCI with two tabs:
 - Save & Apply, Reset to Defaults, Reload from Config
 - Input validation before any UCI writes
 
+## Android setup
+
+Install a SOCKS5 proxy app on your Android device like [Socks5](https://github.com/heiher/socks5), a lightweight, fast proxy from the same author as hev-socks5-tunnel. Configure it to listen on port 1088 (or whatever port you set in OpenTether).
+
+Enable USB debugging in Developer Options, plug into the router, and approve the debug prompt.
+
 ## Dependencies
 
 - [`opentether`](https://github.com/HelaFaye/opentether) — the CLI package this UI wraps
