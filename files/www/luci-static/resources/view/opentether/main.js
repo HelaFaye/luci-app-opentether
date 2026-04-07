@@ -441,8 +441,8 @@ return view.extend({
 				.then(() => fs.exec('uci', ['commit', 'opentether']))
 				.then(() => fs.exec('uci', ['commit', 'network']));
 		}).then(() => uci.apply().catch(() => {}))
-		.then(() => fs.exec('/usr/lib/opentether/setup.sh', ['apply', serial]))
 		.then(() => { if (status) status.textContent = 'Applying...'; })
+		.then(() => fs.exec('/usr/lib/opentether/setup.sh', ['apply', serial]))
 		.then(() => {
 			if (loadedRef) Object.assign(loadedRef, v);
 			// Keep _devices in sync so polls don't re-dirty the form
