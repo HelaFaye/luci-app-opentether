@@ -245,6 +245,7 @@ return view.extend({
 						ms_pidfile: s.pid_file    || '',
 						ms_nofile:  s.limit_nofile || '',
 						metric:     s.metric      || '10',
+					ttl_mangle: s.ttl_mangle  || '0',
 					};
 					if (d.serial) devices.push(d);
 				});
@@ -335,6 +336,15 @@ return view.extend({
 			ms_logfile: get('ms-logfile'), ms_loglevel:get('ms-loglevel'),
 			ms_pidfile: get('ms-pidfile'), ms_nofile:  get('ms-nofile'),
 			metric:     get('metric'),
+			ttl_mangle: (() => {
+				let sel = document.getElementById(pfx + 'ttl');
+				if (!sel) return '0';
+				if (sel.value === 'custom') {
+					let c = document.getElementById(pfx + 'ttl-custom');
+					return (c && c.value.trim()) ? c.value.trim() : '0';
+				}
+				return sel.value;
+			})(),
 		};
 	},
 
@@ -437,12 +447,13 @@ return view.extend({
 			s('pid_file',            v.ms_pidfile);
 			s('limit_nofile',        v.ms_nofile);
 			s('metric',              v.metric);
+			s('ttl_mangle',          v.ttl_mangle);
 			return uci.save()
 				.then(() => fs.exec('uci', ['commit', 'opentether']))
 				.then(() => fs.exec('uci', ['commit', 'network']));
 		}).then(() => uci.apply().catch(() => {}))
-		.then(() => { if (status) status.textContent = 'Applying...'; })
 		.then(() => fs.exec('/usr/lib/opentether/setup.sh', ['apply', serial]))
+		.then(() => { if (status) status.textContent = 'Applying...'; })
 		.then(() => {
 			if (loadedRef) Object.assign(loadedRef, v);
 			// Keep _devices in sync so polls don't re-dirty the form
@@ -810,6 +821,24 @@ return view.extend({
 							this.fld('IPv4 Address',   pfx+'ipv4',  this.inp(pfx+'ipv4','text', d.ipv4,'',up)),
 							this.fld('IPv6 Address',   pfx+'ipv6',  this.inp(pfx+'ipv6','text', d.ipv6,'',up)),
 							this.fld('Route Metric',   pfx+'metric',this.inp(pfx+'metric','number', d.metric,'',up), 'Lower = higher priority'),
+							this.fld('TTL Mangle', pfx+'ttl', (() => {
+								let presets = [['0','Disabled'],['64','64 — Linux/Android default'],['65','65 — common bypass value'],['128','128 — Windows default'],['255','255 — maximum'],['custom','Custom...']];
+								let cur = d.ttl_mangle || '0';
+								let isPreset = presets.some(([v]) => v === cur);
+								let selVal = isPreset ? cur : 'custom';
+								let customInp = E('input', { class: 'ot-input', id: pfx+'ttl-custom', type: 'number', min: '1', max: '255',
+									value: isPreset ? '' : cur,
+									style: 'margin-top:.4rem;display:' + (isPreset ? 'none' : ''),
+									input: up });
+								let sel = E('select', { class: 'ot-select', id: pfx+'ttl', change: function() {
+									let isCustom = this.value === 'custom';
+									customInp.style.display = isCustom ? '' : 'none';
+									if (!isCustom) customInp.value = '';
+									up();
+								}});
+								presets.forEach(([v, l]) => { let o = E('option', { value: v }, l); if (v === selVal) o.selected = true; sel.appendChild(o); });
+								return E('div', {}, [sel, customInp]);
+							})(), 'Set outbound TTL/hop limit. Requires kmod-ipt-ipopt.'),
 							E('div', { class: 'ot-field full' }, this.chkrow(pfx+'enabled', 'Enabled (start tunnel on device connect)', d.enabled==='1', up)),
 							E('div', { class: 'ot-field full' }, this.chkrow(pfx+'mq', 'Multi-queue (improves throughput on multi-core routers)', d.mq==='1', up)),
 						]),
