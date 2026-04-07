@@ -2,7 +2,7 @@
 
 LuCI web interface for [OpenTether](https://github.com/HelaFaye/opentether) — monitor tunnel status, manage multiple Android devices, and configure all hev-socks5-tunnel settings from your browser.
 
-Provides a **Services → OpenTether** page in LuCI with two tabs:
+Provides a **Services → OpenTether** page in LuCI with two tabs.
 
 ## Status tab
 
@@ -29,6 +29,8 @@ The configuration tab provides a full per-device configuration interface.
 - **Reload from Config** imports the on-disk YAML back into UCI, then regenerates and reloads the form — useful if you have manually edited the YAML file
 - Input validation runs before any UCI writes
 
+The Tunnel Interface section includes a **TTL Mangle** dropdown with preset values (disabled, 64, 65, 128, 255) and a custom entry field. See the [opentether README](https://github.com/HelaFaye/opentether#ttl-mangling) for details.
+
 ### Add Device
 
 The Add Device section at the bottom of the Configuration tab lets you register new devices without restarting LuCI.
@@ -47,12 +49,6 @@ Install a SOCKS5 proxy app on your Android device like [Socks5](https://github.c
 
 Enable USB debugging in Developer Options, plug into the router, and approve the debug prompt.
 
-## Android setup
-
-Install a SOCKS5 proxy app on your Android device like [Socks5](https://github.com/heiher/socks5), a lightweight, fast proxy from the same author as hev-socks5-tunnel. Configure it to listen on port 1088 (or whatever port you set in OpenTether).
-
-Enable USB debugging in Developer Options, plug into the router, and approve the debug prompt.
-
 ## Dependencies
 
 - [`opentether`](https://github.com/HelaFaye/opentether) — the CLI package this UI wraps
@@ -61,7 +57,7 @@ Enable USB debugging in Developer Options, plug into the router, and approve the
 ## Building
 
 ```sh
-cp -r luci-app-opentether /path/to/openwrt/package/
+ln -s /path/to/luci-app-opentether /path/to/openwrt/package/luci-app-opentether
 cd /path/to/openwrt
 make menuconfig   # LuCI → Applications → luci-app-opentether
 make package/luci-app-opentether/compile V=s
@@ -69,16 +65,29 @@ make package/luci-app-opentether/compile V=s
 
 ## Installing
 
-**apk (OpenWrt 24+ snapshot builds):**
+### Verified install (recommended)
+
+Add the OpenTether signing key to your router's trusted keys once, then install without `--allow-untrusted`:
+
 ```sh
-scp bin/packages/<arch>/base/luci-app-opentether-*.apk root@192.168.1.1:/tmp/
-ssh root@192.168.1.1 "apk add --allow-untrusted /tmp/luci-app-opentether-*.apk"
+# On your router — do this once
+curl -o /etc/apk/keys/opentether.pub \
+  https://raw.githubusercontent.com/HelaFaye/opentether/main/key-build.pub
+
+# Then install normally
+apk add /tmp/luci-app-opentether-*.apk
 ```
 
-**opkg (OpenWrt stable releases):**
+### Unverified install
+
 ```sh
-scp bin/packages/<arch>/base/luci-app-opentether-*.ipk root@192.168.1.1:/tmp/
-ssh root@192.168.1.1 "opkg install /tmp/luci-app-opentether-*.ipk"
+apk add --allow-untrusted /tmp/luci-app-opentether-*.apk
 ```
 
-Replace `<arch>` with your router's CPU architecture. If you're not sure, run `uname -m` on the router to check.
+### opkg (OpenWrt 23.05 and earlier)
+
+```sh
+opkg install /tmp/luci-app-opentether_*.ipk
+```
+
+Check your architecture first: `uname -m`.
